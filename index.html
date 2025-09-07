@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>36Kr Startup Dataset Viewer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>36Kr Startup Dataset</h1>
+            <p class="subtitle">Total <span id="totalCount">87,718</span> startup projects</p>
+        </header>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search by name, description or industry...">
+                <button onclick="performSearch()">Search</button>
+            </div>
+            
+            <div class="filters">
+                <select id="industryFilter">
+                    <option value="">All Industries</option>
+                </select>
+                
+                <select id="financingFilter">
+                    <option value="">All Financing Rounds</option>
+                </select>
+                
+                <select id="locationFilter">
+                    <option value="">All Locations</option>
+                </select>
+                
+                <select id="yearFilter">
+                    <option value="">All Years</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Logo</th>
+                        <th onclick="sortTable(1)">Company Name</th>
+                        <th onclick="sortTable(2)">Description</th>
+                        <th onclick="sortTable(3)">Industry</th>
+                        <th onclick="sortTable(4)">Financing</th>
+                        <th onclick="sortTable(5)">Location</th>
+                        <th onclick="sortTable(6)">Year</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- 数据将通过 JavaScript 动态加载 -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button onclick="previousPage()" id="prevBtn">Previous</button>
+            <span id="pageInfo">Page 1 of 1</span>
+            <button onclick="nextPage()" id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
