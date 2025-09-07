@@ -123,6 +123,8 @@ function populateSelect(selectId, options) {
             optionElement.textContent = showOriginalChinese ? option : mapToEnglish('financing', option);
         } else if (selectId === 'locationFilter') {
             optionElement.textContent = showOriginalChinese ? option : mapToEnglish('location', option);
+        } else if (selectId === 'yearFilter') {
+            optionElement.textContent = showOriginalChinese ? option : mapToEnglish('year', option);
         } else {
             optionElement.textContent = option;
         }
@@ -266,7 +268,7 @@ function displayData() {
         
         // Year cell
         const yearCell = document.createElement('td');
-        yearCell.textContent = item.establish_year || '-';
+        yearCell.textContent = showOriginalChinese ? (item.establish_year || '-') : (item.establish_year_en || '-');
         
         row.appendChild(logoCell);
         row.appendChild(nameCell);

@@ -138,9 +138,12 @@ const mappingConfig = {
         "海外": "Overseas"
     },
     
-    // Year mapping (keep as is, just ensure consistent format)
+    // Year mapping (remove "年" character for English display)
     year: {
-        // Years will be formatted consistently, keeping the original value
+        // Function to format year by removing "年" character
+        format: function(year) {
+            return year ? year.replace('年', '') : year;
+        }
     }
 };
 
@@ -150,6 +153,11 @@ function mapToEnglish(field, value) {
     
     const fieldMapping = mappingConfig[field];
     if (!fieldMapping) return value;
+    
+    // Special handling for year field
+    if (field === 'year' && fieldMapping.format) {
+        return fieldMapping.format(value);
+    }
     
     // Check for exact match first
     if (fieldMapping[value]) {
@@ -175,7 +183,7 @@ function applyDataMapping(data) {
         ...item,
         industry_en: mapToEnglish('industry', item.industry),
         financing_round_en: mapToEnglish('financing', item.financing_round),
-        location_en: mapToEnglish('location', item.location)
-        // Year doesn't need mapping, just keep original
+        location_en: mapToEnglish('location', item.location),
+        establish_year_en: mapToEnglish('year', item.establish_year)
     }));
 }
