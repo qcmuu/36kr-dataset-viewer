@@ -382,8 +382,8 @@ function calculateAndDisplayStatistics() {
             .sort((a, b) => b[1] - a[1])
             .slice(0, 10),
         years: Object.entries(stats.years)
-            .sort((a, b) => b[0].localeCompare(a[0]))
-            .slice(-10) // Last 10 years
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10) // Top 10 years by count
     };
     
     displayStatistics(sortedStats);
