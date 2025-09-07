@@ -24,6 +24,9 @@ const mappingConfig = {
         "工具软件": "Tools & Software",
         "物联网/硬件": "IoT & Hardware",
         "智能硬件": "Smart Hardware",
+        "其他": "Others",
+        "元宇宙": "Metaverse",
+        "金融": "Finance",
         
         // Combined industries (split by spaces or special characters)
         "企业服务  产业升级": "Enterprise Services & Industrial Upgrade",
@@ -70,7 +73,21 @@ const mappingConfig = {
         "产业升级  先进制造": "Industrial Upgrade & Advanced Manufacturing",
         "产业升级  广告营销": "Industrial Upgrade & Advertising",
         "产业升级  传统制造": "Industrial Upgrade & Traditional Manufacturing",
-        "本地生活  其他": "Local Services & Others"
+        "产业升级  其他": "Industrial Upgrade & Others",
+        "消费电商  其他": "E-commerce & Others",
+        "前沿技术  其他": "Frontier Technology & Others",
+        "企业服务  其他": "Enterprise Services & Others",
+        "医疗健康  其他": "Healthcare & Others",
+        "本地生活  其他": "Local Services & Others",
+        "文化娱乐  其他": "Culture & Entertainment & Others",
+        "教育  其他": "Education & Others",
+        "工具软件  其他": "Tools & Software & Others",
+        "元宇宙  其他": "Metaverse & Others",
+        "先进制造  其他": "Advanced Manufacturing & Others",
+        "物联网/硬件  其他": "IoT/Hardware & Others",
+        "社交网络  其他": "Social Network & Others",
+        "金融  其他": "Finance & Others",
+        "传统制造  其他": "Traditional Manufacturing & Others"
     },
     
     // Financing round mapping
