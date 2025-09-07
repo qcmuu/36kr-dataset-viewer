@@ -5,6 +5,7 @@ let currentPage = 1;
 const itemsPerPage = 50;
 let sortColumn = -1;
 let sortDirection = 1;
+let showOriginalChinese = false; // Toggle between Chinese and English
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
@@ -26,11 +27,15 @@ function loadData() {
             return response.json();
         })
         .then(data => {
-            allData = data.data;
+            // Apply mapping to the data
+            allData = applyDataMapping(data.data);
             filteredData = [...allData];
             
             // Update total count
             document.getElementById('totalCount').textContent = allData.length.toLocaleString();
+            
+            // Add language toggle button
+            addLanguageToggle();
             
             // Populate filter options
             populateFilters();
@@ -60,6 +65,28 @@ function setupEventListeners() {
     document.getElementById('yearFilter').addEventListener('change', applyFilters);
 }
 
+// Add language toggle button
+function addLanguageToggle() {
+    const controls = document.querySelector('.controls');
+    const toggleDiv = document.createElement('div');
+    toggleDiv.style.cssText = 'text-align: right; margin-bottom: 10px;';
+    toggleDiv.innerHTML = `
+        <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+            <span>中文</span>
+            <input type="checkbox" id="langToggle" onchange="toggleLanguage()">
+            <span>English</span>
+        </label>
+    `;
+    controls.insertBefore(toggleDiv, controls.firstChild);
+}
+
+// Toggle between Chinese and English
+function toggleLanguage() {
+    showOriginalChinese = document.getElementById('langToggle').checked;
+    displayData();
+    populateFilters();
+}
+
 // Populate filter dropdowns
 function populateFilters() {
     const industries = [...new Set(allData.map(item => item.industry).filter(Boolean))];
@@ -75,10 +102,26 @@ function populateFilters() {
 
 function populateSelect(selectId, options) {
     const select = document.getElementById(selectId);
+    // Clear existing options except the first one
+    while (select.options.length > 1) {
+        select.remove(1);
+    }
+    
     options.forEach(option => {
         const optionElement = document.createElement('option');
         optionElement.value = option;
-        optionElement.textContent = option;
+        
+        // Apply mapping to display text based on select ID
+        if (selectId === 'industryFilter') {
+            optionElement.textContent = showOriginalChinese ? option : mapToEnglish('industry', option);
+        } else if (selectId === 'financingFilter') {
+            optionElement.textContent = showOriginalChinese ? option : mapToEnglish('financing', option);
+        } else if (selectId === 'locationFilter') {
+            optionElement.textContent = showOriginalChinese ? option : mapToEnglish('location', option);
+        } else {
+            optionElement.textContent = option;
+        }
+        
         select.appendChild(optionElement);
     });
 }
@@ -94,7 +137,10 @@ function performSearch() {
             return (
                 (item.name && item.name.toLowerCase().includes(searchTerm)) ||
                 (item.description && item.description.toLowerCase().includes(searchTerm)) ||
-                (item.industry && item.industry.toLowerCase().includes(searchTerm))
+                (item.industry && item.industry.toLowerCase().includes(searchTerm)) ||
+                (item.industry_en && item.industry_en.toLowerCase().includes(searchTerm)) ||
+                (item.financing_round_en && item.financing_round_en.toLowerCase().includes(searchTerm)) ||
+                (item.location_en && item.location_en.toLowerCase().includes(searchTerm))
             );
         });
     }
@@ -203,15 +249,15 @@ function displayData() {
         
         // Industry cell
         const industryCell = document.createElement('td');
-        industryCell.textContent = item.industry || '-';
+        industryCell.textContent = showOriginalChinese ? (item.industry || '-') : (item.industry_en || '-');
         
         // Financing cell
         const financingCell = document.createElement('td');
-        financingCell.textContent = item.financing_round || '-';
+        financingCell.textContent = showOriginalChinese ? (item.financing_round || '-') : (item.financing_round_en || '-');
         
         // Location cell
         const locationCell = document.createElement('td');
-        locationCell.textContent = item.location || '-';
+        locationCell.textContent = showOriginalChinese ? (item.location || '-') : (item.location_en || '-');
         
         // Year cell
         const yearCell = document.createElement('td');
