@@ -69,20 +69,25 @@ function setupEventListeners() {
 function addLanguageToggle() {
     const controls = document.querySelector('.controls');
     const toggleDiv = document.createElement('div');
-    toggleDiv.style.cssText = 'text-align: right; margin-bottom: 10px;';
+    toggleDiv.className = 'language-toggle-container';
     toggleDiv.innerHTML = `
-        <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
-            <span>中文</span>
-            <input type="checkbox" id="langToggle" onchange="toggleLanguage()">
-            <span>English</span>
-        </label>
+        <div class="language-toggle">
+            <button class="lang-btn active" id="langZh" onclick="setLanguage('zh')">中文</button>
+            <button class="lang-btn" id="langEn" onclick="setLanguage('en')">English</button>
+        </div>
     `;
     controls.insertBefore(toggleDiv, controls.firstChild);
 }
 
-// Toggle between Chinese and English
-function toggleLanguage() {
-    showOriginalChinese = document.getElementById('langToggle').checked;
+// Set language
+function setLanguage(lang) {
+    showOriginalChinese = lang === 'zh';
+    
+    // Update button states
+    document.getElementById('langZh').classList.toggle('active', lang === 'zh');
+    document.getElementById('langEn').classList.toggle('active', lang === 'en');
+    
+    // Update display
     displayData();
     populateFilters();
 }
