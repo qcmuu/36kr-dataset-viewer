@@ -7,6 +7,23 @@ let sortColumn = -1;
 let sortDirection = 1;
 let showOriginalChinese = false; // Toggle between Chinese and English
 
+// Global functions (accessible from HTML)
+window.toggleStatistics = function() {
+    const content = document.getElementById('statsContent');
+    const icon = document.getElementById('toggleIcon');
+    const text = document.getElementById('toggleStatsText');
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.classList.add('rotated');
+        text.textContent = 'Hide Details';
+    } else {
+        content.style.display = 'none';
+        icon.classList.remove('rotated');
+        text.textContent = 'Show Details';
+    }
+};
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
     loadData();
@@ -316,22 +333,6 @@ function nextPage() {
     }
 }
 
-// Toggle statistics display
-function toggleStatistics() {
-    const content = document.getElementById('statsContent');
-    const icon = document.getElementById('toggleIcon');
-    const text = document.getElementById('toggleStatsText');
-    
-    if (content.style.display === 'none') {
-        content.style.display = 'block';
-        icon.classList.add('rotated');
-        text.textContent = 'Hide Details';
-    } else {
-        content.style.display = 'none';
-        icon.classList.remove('rotated');
-        text.textContent = 'Show Details';
-    }
-}
 
 // Calculate and display statistics
 function calculateAndDisplayStatistics() {
