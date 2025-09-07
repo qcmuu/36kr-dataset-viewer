@@ -37,6 +37,9 @@ function loadData() {
             // Add language toggle button
             addLanguageToggle();
             
+            // Calculate and display statistics
+            calculateAndDisplayStatistics();
+            
             // Populate filter options
             populateFilters();
             
@@ -90,6 +93,9 @@ function setLanguage(lang) {
     // Update display
     displayData();
     populateFilters();
+    
+    // Recalculate and update statistics
+    calculateAndDisplayStatistics();
 }
 
 // Populate filter dropdowns
@@ -308,4 +314,165 @@ function nextPage() {
         currentPage++;
         displayData();
     }
+}
+
+// Toggle statistics display
+function toggleStatistics() {
+    const content = document.getElementById('statsContent');
+    const icon = document.getElementById('toggleIcon');
+    const text = document.getElementById('toggleStatsText');
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.classList.add('rotated');
+        text.textContent = 'Hide Details';
+    } else {
+        content.style.display = 'none';
+        icon.classList.remove('rotated');
+        text.textContent = 'Show Details';
+    }
+}
+
+// Calculate and display statistics
+function calculateAndDisplayStatistics() {
+    const stats = {
+        industries: {},
+        financing: {},
+        locations: {},
+        years: {}
+    };
+    
+    // Calculate statistics
+    allData.forEach(item => {
+        // Industry statistics
+        const industry = showOriginalChinese ? item.industry : item.industry_en;
+        if (industry) {
+            stats.industries[industry] = (stats.industries[industry] || 0) + 1;
+        }
+        
+        // Financing statistics
+        const financing = showOriginalChinese ? item.financing_round : item.financing_round_en;
+        if (financing) {
+            stats.financing[financing] = (stats.financing[financing] || 0) + 1;
+        }
+        
+        // Location statistics
+        const location = showOriginalChinese ? item.location : item.location_en;
+        if (location) {
+            stats.locations[location] = (stats.locations[location] || 0) + 1;
+        }
+        
+        // Year statistics
+        const year = showOriginalChinese ? item.establish_year : item.establish_year_en;
+        if (year) {
+            stats.years[year] = (stats.years[year] || 0) + 1;
+        }
+    });
+    
+    // Sort statistics by count
+    const sortedStats = {
+        industries: Object.entries(stats.industries)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10),
+        financing: Object.entries(stats.financing)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 8),
+        locations: Object.entries(stats.locations)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10),
+        years: Object.entries(stats.years)
+            .sort((a, b) => b[0].localeCompare(a[0]))
+            .slice(-10) // Last 10 years
+    };
+    
+    displayStatistics(sortedStats);
+}
+
+// Display statistics in cards
+function displayStatistics(stats) {
+    const statsGrid = document.getElementById('statsGrid');
+    const total = allData.length;
+    
+    // Industry card
+    const industryCard = createStatCard(
+        'Industry Distribution',
+        '🏢',
+        stats.industries,
+        total
+    );
+    
+    // Financing card
+    const financingCard = createStatCard(
+        'Financing Rounds',
+        '💰',
+        stats.financing,
+        total
+    );
+    
+    // Location card
+    const locationCard = createStatCard(
+        'Top Locations',
+        '📍',
+        stats.locations,
+        total
+    );
+    
+    // Year card
+    const yearCard = createStatCard(
+        'Establishment Years',
+        '📅',
+        stats.years,
+        total
+    );
+    
+    statsGrid.innerHTML = '';
+    statsGrid.appendChild(industryCard);
+    statsGrid.appendChild(financingCard);
+    statsGrid.appendChild(locationCard);
+    statsGrid.appendChild(yearCard);
+}
+
+// Create a statistics card
+function createStatCard(title, icon, data, total) {
+    const card = document.createElement('div');
+    card.className = 'stat-card';
+    
+    const list = document.createElement('ul');
+    list.className = 'stat-list';
+    
+    data.forEach(([label, count]) => {
+        const percentage = ((count / total) * 100).toFixed(1);
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span class="stat-label">${label}</span>
+            <span>
+                <span class="stat-value">${count.toLocaleString()}</span>
+                <span class="stat-percentage">${percentage}%</span>
+            </span>
+        `;
+        list.appendChild(li);
+    });
+    
+    const header = document.createElement('h3');
+    header.innerHTML = `
+        <span class="stat-icon">${icon}</span>
+        ${title}
+    `;
+    
+    card.appendChild(header);
+    card.appendChild(list);
+    
+    // Add show more button if more than 5 items
+    if (data.length > 5) {
+        const showMoreBtn = document.createElement('button');
+        showMoreBtn.className = 'show-more-btn';
+        showMoreBtn.textContent = 'Show More';
+        showMoreBtn.onclick = function() {
+            card.classList.toggle('expanded');
+            this.textContent = card.classList.contains('expanded') ? 'Show Less' : 'Show More';
+        };
+        card.appendChild(showMoreBtn);
+    }
+    
+    return card;
 }

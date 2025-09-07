@@ -13,6 +13,24 @@
             <p class="subtitle">Total <span id="totalCount">87,718</span> startup projects</p>
         </header>
 
+        <!-- Statistics Section -->
+        <div class="statistics-section" id="statisticsSection">
+            <div class="stats-header">
+                <h2>Statistics Overview</h2>
+                <button class="toggle-stats-btn" id="toggleStatsBtn" onclick="toggleStatistics()">
+                    <span id="toggleStatsText">Show Details</span>
+                    <svg class="toggle-icon" id="toggleIcon" viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="stats-content" id="statsContent" style="display: none;">
+                <div class="stats-grid" id="statsGrid">
+                    <!-- Statistics will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
         <div class="controls">
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Search by name, description, industry (English/Chinese)...">
